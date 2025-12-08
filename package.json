@@ -1,0 +1,13 @@
+{
+  "name": "77cargo-frontend",
+  "version": "1.0.0",
+  "description": "77 Cargo Careers Website Frontend",
+  "scripts": {
+    "build:css": "npx tailwindcss -i ./frontend/css/input.css -o ./frontend/css/styles.css --minify",
+    "watch:css": "npx tailwindcss -i ./frontend/css/input.css -o ./frontend/css/styles.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
+

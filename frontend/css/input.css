@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-body text-cargo-dark-500 bg-white antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold;
+  }
+}
+
+@layer components {
+  /* Navigation */
+  .nav-link {
+    @apply relative text-cargo-gray-400 hover:text-cargo-red transition-colors duration-300 font-medium;
+  }
+  
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-cargo-red transition-all duration-300;
+  }
+  
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    @apply w-full;
+  }
+  
+  .nav-link.active {
+    @apply text-cargo-red;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 font-semibold rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  
+  .btn-primary {
+    @apply btn bg-cargo-red text-white hover:bg-cargo-red-600 focus:ring-cargo-red shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-white text-cargo-dark border-2 border-cargo-dark hover:bg-cargo-dark hover:text-white focus:ring-cargo-dark;
+  }
+  
+  .btn-outline {
+    @apply btn bg-transparent text-white border-2 border-white hover:bg-white hover:text-cargo-dark focus:ring-white;
+  }
+
+  /* Form Elements */
+  .form-input {
+    @apply w-full px-4 py-3 border-2 border-cargo-gray-200 rounded-lg 
+           focus:border-cargo-red focus:ring-2 focus:ring-cargo-red/20 focus:outline-none
+           transition-all duration-300 bg-white text-cargo-dark
+           placeholder:text-cargo-gray-300;
+  }
+  
+  .form-label {
+    @apply block text-sm font-semibold text-cargo-dark mb-2;
+  }
+  
+  .form-label-required::after {
+    content: ' *';
+    @apply text-cargo-red;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white rounded-2xl shadow-lg p-6 md:p-8 transition-all duration-300;
+  }
+  
+  .card-hover {
+    @apply card hover:shadow-2xl hover:-translate-y-1;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    @apply relative min-h-screen flex items-center justify-center overflow-hidden;
+  }
+  
+  .hero-overlay {
+    @apply absolute inset-0;
+    background: linear-gradient(135deg, rgba(26,26,26,0.95) 0%, rgba(74,74,74,0.90) 50%, rgba(26,26,26,0.95) 100%);
+  }
+
+  /* Section Styles */
+  .section {
+    @apply py-16 md:py-24;
+  }
+  
+  .section-title {
+    @apply text-3xl md:text-4xl lg:text-5xl font-display font-bold text-cargo-dark mb-4;
+  }
+  
+  .section-subtitle {
+    @apply text-lg md:text-xl text-cargo-gray-400 max-w-2xl;
+  }
+
+  /* Feature Cards */
+  .feature-card {
+    @apply bg-white rounded-2xl p-8 shadow-lg border border-cargo-gray-100 
+           hover:border-cargo-red/30 hover:shadow-xl transition-all duration-500;
+  }
+  
+  .feature-icon {
+    @apply w-16 h-16 rounded-xl bg-cargo-red/10 flex items-center justify-center
+           text-cargo-red mb-6 transition-all duration-500;
+  }
+  
+  .feature-card:hover .feature-icon {
+    @apply bg-cargo-red text-white;
+  }
+
+  /* Mobile Menu */
+  .mobile-menu {
+    @apply fixed inset-0 z-50 transform transition-transform duration-300;
+    background-color: rgba(26, 26, 26, 0.98);
+  }
+  
+  .mobile-menu.hidden {
+    @apply translate-x-full;
+  }
+
+  /* Progress Steps */
+  .step-indicator {
+    @apply flex items-center justify-center w-10 h-10 rounded-full 
+           border-2 border-cargo-gray-200 text-cargo-gray-400 font-semibold
+           transition-all duration-300;
+  }
+  
+  .step-indicator.active {
+    @apply border-cargo-red bg-cargo-red text-white;
+  }
+  
+  .step-indicator.completed {
+    @apply border-cargo-red bg-cargo-red text-white;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+  
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+  
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+  
+  .animate-delay-500 {
+    animation-delay: 500ms;
+  }
+}
+
