@@ -4,10 +4,19 @@ from config import get_settings
 
 settings = get_settings()
 
-engine = create_async_engine(
-    settings.database_url,
-    echo=True,
-)
+# Use async-compatible database URL
+database_url = settings.get_async_database_url()
+
+# Configure engine based on database type
+engine_kwargs = {
+    "echo": False,  # Disable SQL logging in production
+}
+
+# SQLite needs special handling for async
+if database_url.startswith("sqlite"):
+    engine_kwargs["connect_args"] = {"check_same_thread": False}
+
+engine = create_async_engine(database_url, **engine_kwargs)
 
 async_session = async_sessionmaker(
     engine,
