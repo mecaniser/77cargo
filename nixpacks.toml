@@ -1,5 +1,7 @@
 # Nixpacks configuration for Railway
-# Nixpacks will auto-detect Node.js from package.json and Python from backend/requirements.txt
+# Explicitly specify both providers to ensure both Node.js and Python are available
+providers = ["node", "python"]
+
 [variables]
 NIXPACKS_NODE_VERSION = "18"
 NIXPACKS_PYTHON_VERSION = "3.11"
