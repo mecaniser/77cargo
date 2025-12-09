@@ -6,6 +6,9 @@ providers = ["node", "python"]
 NIXPACKS_NODE_VERSION = "18"
 NIXPACKS_PYTHON_VERSION = "3.11"
 
+[phases.setup]
+nixPkgs = ["nodejs-18_x", "python311"]
+
 [phases.install]
 cmds = [
   "npm ci",
