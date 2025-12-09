@@ -19,6 +19,9 @@ RUN npm ci
 # Copy frontend source (including src directory for React)
 COPY frontend/ ./frontend/
 
+# Copy PostCSS config to frontend directory as well (Vite root is ./frontend)
+COPY postcss.config.js ./frontend/
+
 # Build React app
 RUN npm run build || (echo "Build failed, checking dist..." && ls -la dist/ 2>/dev/null || echo "No dist folder created")
 
