@@ -67,6 +67,25 @@ document.addEventListener('DOMContentLoaded', () => {
             nav.classList.remove('shadow-md');
         }
 
+        // Update scroll indicator direction and behavior based on scroll position
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        const scrollArrow = document.getElementById('scrollArrow');
+        if (scrollIndicator && scrollArrow) {
+            const viewportHeight = window.innerHeight;
+            const maxScroll = document.documentElement.scrollHeight - viewportHeight;
+            const isAtBottom = currentScroll >= maxScroll - 10; // 10px threshold
+            
+            if (isAtBottom) {
+                // Rotate arrow to point up
+                scrollArrow.style.transform = 'rotate(180deg)';
+                scrollIndicator.setAttribute('aria-label', 'Scroll to top');
+            } else {
+                // Arrow points down
+                scrollArrow.style.transform = 'rotate(0deg)';
+                scrollIndicator.setAttribute('aria-label', 'Scroll down');
+            }
+        }
+
         lastScroll = currentScroll;
     });
 
@@ -86,15 +105,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Scroll indicator click handler
+    // Scroll indicator click handler - scrolls down or up based on position
     const scrollIndicator = document.getElementById('scrollIndicator');
     if (scrollIndicator) {
         scrollIndicator.addEventListener('click', () => {
-            const servicesSection = document.getElementById('services');
-            if (servicesSection) {
-                servicesSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+            const viewportHeight = window.innerHeight;
+            const currentScroll = window.pageYOffset;
+            const maxScroll = document.documentElement.scrollHeight - viewportHeight;
+            const isAtBottom = currentScroll >= maxScroll - 10;
+            
+            if (isAtBottom) {
+                // Scroll to top
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            } else {
+                // Scroll down by viewport height
+                const targetScroll = currentScroll + viewportHeight;
+                window.scrollTo({
+                    top: Math.min(targetScroll, maxScroll),
+                    behavior: 'smooth'
                 });
             }
         });
