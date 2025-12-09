@@ -10,7 +10,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 COPY vite.config.js ./
-COPY tailwind.config.js* ./
+COPY tailwind.config.js ./
+COPY postcss.config.js ./
 
 # Install Node dependencies
 RUN npm ci
