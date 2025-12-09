@@ -41,6 +41,9 @@ COPY --from=node-builder /app/dist ./dist
 # Copy frontend folder (for fallback)
 COPY --from=node-builder /app/frontend ./frontend
 
+# Create directory for SQLite database if needed
+RUN mkdir -p /app/backend
+
 # Expose port
 EXPOSE 8000
 
@@ -52,5 +55,7 @@ WORKDIR /app/backend
 
 # Use shell form to allow environment variable substitution
 # Railway sets PORT env var dynamically
+# Add PYTHONUNBUFFERED to see logs immediately
+ENV PYTHONUNBUFFERED=1
 CMD sh -c "python3 -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"
 
