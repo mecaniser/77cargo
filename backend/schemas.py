@@ -10,13 +10,6 @@ class JobApplicationCreate(BaseModel):
     last_name: str = Field(..., min_length=1, max_length=100)
     email: EmailStr
     phone: str = Field(..., min_length=10, max_length=20)
-    country_of_birth: str = Field(..., min_length=1, max_length=100)
-    date_of_birth: str = Field(..., min_length=1)
-    
-    address: Optional[str] = None
-    city: Optional[str] = None
-    state: Optional[str] = None
-    zip_code: Optional[str] = None
     
     years_experience: Optional[int] = None
     cdl_class: Optional[str] = None
@@ -32,12 +25,6 @@ class JobApplicationResponse(BaseModel):
     last_name: str
     email: str
     phone: str
-    country_of_birth: str
-    date_of_birth: str
-    address: Optional[str]
-    city: Optional[str]
-    state: Optional[str]
-    zip_code: Optional[str]
     years_experience: Optional[int]
     cdl_class: Optional[str]
     cdl_expiration: Optional[str]

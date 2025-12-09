@@ -212,7 +212,6 @@
                     <tr class="hover:bg-cargo-gray-50 transition-colors">
                         <td class="px-4 py-4">
                             <div class="font-medium text-cargo-dark">${app.first_name} ${app.last_name}</div>
-                            <div class="text-sm text-cargo-gray-400">${app.country_of_birth}</div>
                         </td>
                         <td class="px-4 py-4">
                             <div class="text-sm">${app.email}</div>
@@ -313,15 +312,6 @@
                                     <p><span class="font-medium">Name:</span> ${app.first_name} ${app.last_name}</p>
                                     <p><span class="font-medium">Email:</span> ${app.email}</p>
                                     <p><span class="font-medium">Phone:</span> ${formatPhone(app.phone)}</p>
-                                    <p><span class="font-medium">Country:</span> ${app.country_of_birth}</p>
-                                    <p><span class="font-medium">DOB:</span> ${app.date_of_birth}</p>
-                                </div>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-semibold text-cargo-gray-400 uppercase mb-2">Address</h4>
-                                <div class="space-y-2">
-                                    <p>${app.address || 'Not provided'}</p>
-                                    <p>${app.city || ''} ${app.state || ''} ${app.zip_code || ''}</p>
                                 </div>
                             </div>
                         </div>

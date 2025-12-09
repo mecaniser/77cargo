@@ -22,14 +22,14 @@ class JobApplication(Base):
     last_name = Column(String(100), nullable=False)
     email = Column(String(255), nullable=False, index=True)
     phone = Column(String(20), nullable=False)
-    country_of_birth = Column(String(100), nullable=False)
-    date_of_birth = Column(String(20), nullable=False)
+    date_of_birth = Column(String(20), nullable=True)  # Deprecated - kept for database compatibility
     
-    # Address
+    # Address (deprecated - kept for database compatibility)
     address = Column(String(255), nullable=True)
     city = Column(String(100), nullable=True)
     state = Column(String(100), nullable=True)
     zip_code = Column(String(20), nullable=True)
+    country_of_birth = Column(String(100), nullable=True)
     
     # Professional Information
     years_experience = Column(Integer, nullable=True)

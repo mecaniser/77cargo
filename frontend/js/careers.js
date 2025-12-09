@@ -95,24 +95,12 @@ function populateReview() {
     
     // Build review HTML
     let html = `
-        <div class="grid sm:grid-cols-2 gap-6">
-            <div class="bg-cargo-gray-50 rounded-lg p-4">
-                <h4 class="text-sm font-semibold text-cargo-gray-400 uppercase tracking-wide mb-3">Personal Information</h4>
-                <div class="space-y-2">
-                    <p><span class="font-medium">Name:</span> ${formData.get('first_name')} ${formData.get('last_name')}</p>
-                    <p><span class="font-medium">Email:</span> ${formData.get('email')}</p>
-                    <p><span class="font-medium">Phone:</span> ${formData.get('phone')}</p>
-                    <p><span class="font-medium">Country of Birth:</span> ${formData.get('country_of_birth')}</p>
-                    <p><span class="font-medium">Date of Birth:</span> ${formData.get('date_of_birth')}</p>
-                </div>
-            </div>
-            
-            <div class="bg-cargo-gray-50 rounded-lg p-4">
-                <h4 class="text-sm font-semibold text-cargo-gray-400 uppercase tracking-wide mb-3">Address</h4>
-                <div class="space-y-2">
-                    <p>${formData.get('address') || 'Not provided'}</p>
-                    <p>${formData.get('city') || ''} ${formData.get('state') || ''} ${formData.get('zip_code') || ''}</p>
-                </div>
+        <div class="bg-cargo-gray-50 rounded-lg p-4">
+            <h4 class="text-sm font-semibold text-cargo-gray-400 uppercase tracking-wide mb-3">Personal Information</h4>
+            <div class="space-y-2">
+                <p><span class="font-medium">Name:</span> ${formData.get('first_name')} ${formData.get('last_name')}</p>
+                <p><span class="font-medium">Email:</span> ${formData.get('email')}</p>
+                <p><span class="font-medium">Phone:</span> ${formData.get('phone')}</p>
             </div>
         </div>
         
@@ -189,12 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 last_name: formData.get('last_name'),
                 email: formData.get('email'),
                 phone: formData.get('phone').replace(/\D/g, ''),
-                country_of_birth: formData.get('country_of_birth'),
-                date_of_birth: formData.get('date_of_birth'),
-                address: formData.get('address') || null,
-                city: formData.get('city') || null,
-                state: formData.get('state') || null,
-                zip_code: formData.get('zip_code') || null,
                 years_experience: formData.get('years_experience') ? parseInt(formData.get('years_experience')) : null,
                 cdl_class: formData.get('cdl_class') || null,
                 cdl_expiration: formData.get('cdl_expiration') || null,
