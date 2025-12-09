@@ -85,6 +85,20 @@ document.addEventListener('DOMContentLoaded', () => {
             e.target.value = value;
         });
     });
+
+    // Scroll indicator click handler
+    const scrollIndicator = document.getElementById('scrollIndicator');
+    if (scrollIndicator) {
+        scrollIndicator.addEventListener('click', () => {
+            const servicesSection = document.getElementById('services');
+            if (servicesSection) {
+                servicesSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    }
 });
 
 // Smooth scroll for anchor links
