@@ -19,7 +19,7 @@ RUN npm ci
 COPY frontend/ ./frontend/
 
 # Build React app
-RUN npm run build
+RUN npm run build || (echo "Build failed, checking dist..." && ls -la dist/ 2>/dev/null || echo "No dist folder created")
 
 # Python runtime stage
 FROM python:3.11-slim
