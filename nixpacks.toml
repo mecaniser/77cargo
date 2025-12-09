@@ -1,8 +1,22 @@
 # Nixpacks configuration for Railway
-providers = ["python"]
+providers = ["node", "python"]
 
 [variables]
 NIXPACKS_PYTHON_VERSION = "3.11"
+NIXPACKS_NODE_VERSION = "18"
+
+[phases.setup]
+nixPkgs = ["nodejs-18_x", "python311"]
+
+[phases.install]
+cmds = [
+  "npm ci",
+  "cd backend && pip install -r requirements.txt"
+]
+
+# Build React app (runs automatically via postinstall script, but explicit is better)
+[phases.build]
+cmds = ["npm run build"]
 
 [start]
 cmd = "cd backend && uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"

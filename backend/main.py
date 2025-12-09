@@ -42,7 +42,12 @@ app.add_middleware(
 
 # Mount static files
 frontend_path = os.path.join(os.path.dirname(__file__), "..", "frontend")
-if os.path.exists(frontend_path):
+dist_path = os.path.join(os.path.dirname(__file__), "..", "dist")
+
+# Serve React build if it exists (production), otherwise serve frontend folder
+if os.path.exists(dist_path):
+    app.mount("/static", StaticFiles(directory=dist_path), name="static")
+elif os.path.exists(frontend_path):
     app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 
 
@@ -173,27 +178,28 @@ async def get_contact_messages(
 
 @app.get("/")
 async def serve_home():
-    return FileResponse(os.path.join(frontend_path, "index.html"))
+    """Serve React app homepage"""
+    index_path = os.path.join(dist_path, "index.html") if os.path.exists(dist_path) else os.path.join(frontend_path, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    raise HTTPException(status_code=404, detail="Frontend not found")
 
 
-@app.get("/careers")
-async def serve_careers():
-    return FileResponse(os.path.join(frontend_path, "careers.html"))
-
-
-@app.get("/about")
-async def serve_about():
-    return FileResponse(os.path.join(frontend_path, "about.html"))
-
-
-@app.get("/contact")
-async def serve_contact():
-    return FileResponse(os.path.join(frontend_path, "contact.html"))
-
-
-@app.get("/admin")
-async def serve_admin():
-    return FileResponse(os.path.join(frontend_path, "admin.html"))
+# Serve React app for all frontend routes (React Router handles client-side routing)
+# This catch-all route must be LAST to not interfere with API routes
+@app.get("/{full_path:path}")
+async def serve_react_app(full_path: str):
+    # Don't interfere with API routes or static files
+    if full_path.startswith("api/") or full_path.startswith("static/"):
+        raise HTTPException(status_code=404, detail="Not found")
+    
+    # Serve React app's index.html for all routes (React Router handles routing)
+    index_path = os.path.join(dist_path, "index.html") if os.path.exists(dist_path) else os.path.join(frontend_path, "index.html")
+    
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    
+    raise HTTPException(status_code=404, detail="Not found")
 
 
 # Health check

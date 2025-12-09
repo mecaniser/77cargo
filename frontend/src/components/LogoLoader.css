@@ -1,0 +1,135 @@
+.logo-loader {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease-out;
+}
+
+.logo-loader.fade-out {
+  opacity: 0;
+}
+
+.logo-loader__container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.logo-loader__arrows-container {
+  position: relative;
+  display: inline-block;
+  width: 4rem;
+  height: 4rem;
+}
+
+@media (min-width: 768px) {
+  .logo-loader__arrows-container {
+    width: 5rem;
+    height: 5rem;
+  }
+}
+
+.logo-loader__svg {
+  width: 4rem;
+  height: 4rem;
+}
+
+@media (min-width: 768px) {
+  .logo-loader__svg {
+    width: 5rem;
+    height: 5rem;
+  }
+}
+
+/* Left Arrow Animation */
+.logo-loader__arrow--left {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: slideInFromLeft 0.8s ease-out forwards;
+}
+
+/* Right Arrow Animation */
+.logo-loader__arrow--right {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: slideInFromRight 0.8s ease-out 0.2s forwards;
+}
+
+/* Text Animation */
+.logo-loader__text {
+  opacity: 0;
+  margin-left: 0.75rem;
+  animation: fadeInUp 0.6s ease-out 0.6s forwards;
+}
+
+.logo-loader__text-number {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #C41E3A;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.logo-loader__text-name {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #1A1A1A;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+@media (min-width: 768px) {
+  .logo-loader__text-number,
+  .logo-loader__text-name {
+    font-size: 3rem;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+

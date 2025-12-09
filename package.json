@@ -3,14 +3,25 @@
   "version": "1.0.0",
   "description": "77 Cargo Careers Website Frontend",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "build:css": "npx tailwindcss -i ./frontend/css/input.css -o ./frontend/css/styles.css --minify",
     "watch:css": "npx tailwindcss -i ./frontend/css/input.css -o ./frontend/css/styles.css --watch",
     "dev:server": "cd backend && ./venv/bin/uvicorn main:app --reload --host 0.0.0.0 --port 8000",
-    "dev": "concurrently \"npm run watch:css\" \"npm run dev:server\" --names \"CSS,API\" --prefix-colors \"cyan,green\"",
+    "dev:full": "concurrently \"npm run dev\" \"npm run dev:server\" --names \"REACT,API\" --prefix-colors \"cyan,green\"",
     "dev:win": "concurrently \"npm run watch:css\" \"cd backend && .\\venv\\Scripts\\uvicorn.exe main:app --reload --host 0.0.0.0 --port 8000\" --names \"CSS,API\" --prefix-colors \"cyan,green\""
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
     "concurrently": "^8.2.2",
-    "tailwindcss": "^3.4.1"
+    "http-proxy-middleware": "^3.0.5",
+    "tailwindcss": "^3.4.1",
+    "vite": "^6.4.1"
+  },
+  "dependencies": {
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "react-router-dom": "^6.30.2"
   }
 }
