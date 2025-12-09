@@ -46,6 +46,11 @@ dist_path = os.path.join(os.path.dirname(__file__), "..", "dist")
 
 # Serve React build if it exists (production), otherwise serve frontend folder
 if os.path.exists(dist_path):
+    # Mount assets folder for React build (Vite outputs to /assets/)
+    assets_path = os.path.join(dist_path, "assets")
+    if os.path.exists(assets_path):
+        app.mount("/assets", StaticFiles(directory=assets_path), name="assets")
+    # Mount static for CSS and other static files
     app.mount("/static", StaticFiles(directory=dist_path), name="static")
 elif os.path.exists(frontend_path):
     app.mount("/static", StaticFiles(directory=frontend_path), name="static")
@@ -190,7 +195,7 @@ async def serve_home():
 @app.get("/{full_path:path}")
 async def serve_react_app(full_path: str):
     # Don't interfere with API routes or static files
-    if full_path.startswith("api/") or full_path.startswith("static/"):
+    if full_path.startswith("api/") or full_path.startswith("static/") or full_path.startswith("assets/"):
         raise HTTPException(status_code=404, detail="Not found")
     
     # Serve React app's index.html for all routes (React Router handles routing)
