@@ -10,11 +10,12 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 COPY vite.config.js ./
+COPY tailwind.config.js* ./
 
 # Install Node dependencies
 RUN npm ci
 
-# Copy frontend source
+# Copy frontend source (including src directory for React)
 COPY frontend/ ./frontend/
 
 # Build React app
@@ -38,7 +39,7 @@ COPY backend/ ./backend/
 # Copy built React app from node-builder stage
 COPY --from=node-builder /app/dist ./dist
 
-# Copy frontend folder (for fallback)
+# Copy frontend folder (for fallback - includes CSS)
 COPY --from=node-builder /app/frontend ./frontend
 
 # Create directory for SQLite database if needed
