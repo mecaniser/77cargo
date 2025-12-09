@@ -51,5 +51,6 @@ ENV PORT=8000
 WORKDIR /app/backend
 
 # Use shell form to allow environment variable substitution
-CMD ["sh", "-c", "python3 -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Railway sets PORT env var dynamically
+CMD sh -c "python3 -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"
 
