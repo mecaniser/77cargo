@@ -49,5 +49,7 @@ ENV PORT=8000
 
 # Run the application
 WORKDIR /app/backend
-CMD python3 -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
+
+# Use shell form to allow environment variable substitution
+CMD ["sh", "-c", "python3 -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
 
