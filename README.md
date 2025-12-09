@@ -76,8 +76,25 @@ A modern, mobile-first careers website for 77 Cargo trucking company built with 
    ```
 
 4. **Run the application**
+
+   **Single command for development (recommended):**
    ```bash
+   npm run dev
+   ```
+   
+   This will automatically:
+   - Watch and rebuild CSS when you make changes
+   - Run the backend server with hot reload
+   - Display both processes in a single terminal with color-coded output
+   
+   **Alternative - Manual setup (if needed):**
+   ```bash
+   # Terminal 1 - CSS Watcher
+   npm run watch:css
+   
+   # Terminal 2 - Backend Server
    cd backend
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    uvicorn main:app --reload --host 0.0.0.0 --port 8000
    ```
 
@@ -88,10 +105,12 @@ A modern, mobile-first careers website for 77 Cargo trucking company built with 
 
 ### Development
 
-For CSS development with hot reload:
-```bash
-npm run watch:css
-```
+The `npm run dev` command runs both the CSS watcher and backend server together. The CSS will automatically rebuild whenever you:
+- Add/remove Tailwind classes in HTML files
+- Modify `frontend/css/input.css`
+- Change `tailwind.config.js`
+
+**For Windows users:** Use `npm run dev:win` instead of `npm run dev`
 
 ## 📡 API Endpoints
 
