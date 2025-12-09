@@ -179,6 +179,13 @@ async def get_contact_messages(
     return result.scalars().all()
 
 
+# ============== Health Check ==============
+
+@app.get("/api/health")
+async def health_check():
+    return {"status": "healthy", "service": "77 Cargo API"}
+
+
 # ============== Frontend Routes ==============
 
 @app.get("/")
@@ -205,10 +212,4 @@ async def serve_react_app(full_path: str):
         return FileResponse(index_path)
     
     raise HTTPException(status_code=404, detail="Not found")
-
-
-# Health check
-@app.get("/api/health")
-async def health_check():
-    return {"status": "healthy", "service": "77 Cargo API"}
 
