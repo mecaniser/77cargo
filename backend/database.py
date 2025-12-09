@@ -38,6 +38,8 @@ async def get_db():
 
 
 async def init_db():
+    # Import models to ensure they're registered with Base
+    from models import JobApplication, ContactMessage  # noqa: F401
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
