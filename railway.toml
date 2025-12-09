@@ -1,10 +1,10 @@
 [build]
 builder = "nixpacks"
-# Railway will detect the Python app in backend folder
 
 [deploy]
+# Build command will be handled by nixpacks phases
 # Start from the backend directory
-startCommand = "cd backend && uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"
+startCommand = "cd backend && python3 -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"
 healthcheckPath = "/api/health"
 healthcheckTimeout = 100
 restartPolicyType = "on_failure"
