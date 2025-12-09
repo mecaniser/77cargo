@@ -1,13 +1,18 @@
 # Nixpacks configuration for Railway
-# Let Nixpacks auto-detect both Node.js (from package.json) and Python (from requirements.txt)
+# Use Node provider, but ensure Python is also available
+providers = ["node"]
+
 [variables]
 NIXPACKS_NODE_VERSION = "18"
 NIXPACKS_PYTHON_VERSION = "3.11"
 
+[phases.setup]
+nixPkgs = ["nodejs-18_x", "python311"]
+
 [phases.install]
 cmds = [
   "npm ci",
-  "pip install -r requirements.txt"
+  "python3 -m pip install --user -r requirements.txt"
 ]
 
 [phases.build]
