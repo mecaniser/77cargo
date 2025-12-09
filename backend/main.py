@@ -50,7 +50,7 @@ if os.path.exists(dist_path):
     assets_path = os.path.join(dist_path, "assets")
     if os.path.exists(assets_path):
         app.mount("/assets", StaticFiles(directory=assets_path), name="assets")
-    # Mount static for CSS and other static files
+    # Mount static for CSS and other static files (mount the entire dist folder)
     app.mount("/static", StaticFiles(directory=dist_path), name="static")
 elif os.path.exists(frontend_path):
     app.mount("/static", StaticFiles(directory=frontend_path), name="static")
