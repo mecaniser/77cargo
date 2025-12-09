@@ -42,6 +42,12 @@ COPY --from=node-builder /app/dist ./dist
 # Copy frontend folder (for fallback - includes CSS)
 COPY --from=node-builder /app/frontend ./frontend
 
+# Ensure CSS file exists in dist/static/css for the HTML reference
+RUN mkdir -p ./dist/static/css && \
+    if [ -f ./frontend/css/styles.css ]; then \
+        cp ./frontend/css/styles.css ./dist/static/css/styles.css; \
+    fi
+
 # Create directory for SQLite database if needed
 RUN mkdir -p /app/backend
 
