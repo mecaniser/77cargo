@@ -7,7 +7,7 @@ RUN apk add --no-cache python3 py3-pip
 # Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy package files and configs
 COPY package*.json ./
 COPY vite.config.js ./
 COPY tailwind.config.js ./
@@ -19,11 +19,11 @@ RUN npm ci
 # Copy frontend source (including src directory for React)
 COPY frontend/ ./frontend/
 
-# Copy PostCSS config to frontend directory as well (Vite root is ./frontend)
+# Copy PostCSS config to frontend directory (Vite root is ./frontend, PostCSS looks for config there)
 COPY postcss.config.js ./frontend/
 
 # Build React app
-RUN npm run build || (echo "Build failed, checking dist..." && ls -la dist/ 2>/dev/null || echo "No dist folder created")
+RUN npm run build
 
 # Python runtime stage
 FROM python:3.11-slim
@@ -42,15 +42,6 @@ COPY backend/ ./backend/
 
 # Copy built React app from node-builder stage
 COPY --from=node-builder /app/dist ./dist
-
-# Copy frontend folder (for fallback - includes CSS)
-COPY --from=node-builder /app/frontend ./frontend
-
-# Ensure CSS file exists in dist/static/css for the HTML reference
-RUN mkdir -p ./dist/static/css && \
-    if [ -f ./frontend/css/styles.css ]; then \
-        cp ./frontend/css/styles.css ./dist/static/css/styles.css; \
-    fi
 
 # Create directory for SQLite database if needed
 RUN mkdir -p /app/backend

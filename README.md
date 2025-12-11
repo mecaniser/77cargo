@@ -15,7 +15,7 @@ A modern, mobile-first careers website for 77 Cargo trucking company built with 
 
 - **Backend**: Python 3.11+, FastAPI, SQLAlchemy (async)
 - **Database**: SQLite (easily swappable to PostgreSQL)
-- **Frontend**: HTML5, Tailwind CSS, Vanilla JavaScript
+- **Frontend**: React.js, Vite, Tailwind CSS, React Router
 - **Fonts**: Playfair Display (headings), Source Sans 3 (body)
 
 ## 📁 Project Structure
@@ -30,19 +30,25 @@ A modern, mobile-first careers website for 77 Cargo trucking company built with 
 │   ├── config.py        # Settings management
 │   └── requirements.txt # Python dependencies
 ├── frontend/
-│   ├── index.html       # Homepage
-│   ├── careers.html     # Careers page with application form
-│   ├── about.html       # About page
-│   ├── contact.html     # Contact page
-│   ├── admin.html       # Admin dashboard
+│   ├── index.html       # React entry point
 │   ├── css/
-│   │   ├── input.css    # Tailwind input file
-│   │   └── styles.css   # Compiled CSS
-│   └── js/
-│       ├── main.js      # Shared JavaScript
-│       └── careers.js   # Careers form logic
+│   │   └── input.css    # Tailwind CSS source
+│   └── src/
+│       ├── main.jsx     # React entry point
+│       ├── App.jsx      # Main React component
+│       └── components/  # React components
+│           ├── HomePage.jsx
+│           ├── AboutPage.jsx
+│           ├── ContactPage.jsx
+│           ├── CareersPage.jsx
+│           ├── AdminPage.jsx
+│           └── ...
+├── dist/                # Production build (generated)
+├── Dockerfile           # Docker configuration for Railway
 ├── package.json         # npm configuration
+├── vite.config.js       # Vite configuration
 ├── tailwind.config.js   # Tailwind configuration
+├── postcss.config.js    # PostCSS configuration
 └── README.md
 ```
 
@@ -68,49 +74,48 @@ A modern, mobile-first careers website for 77 Cargo trucking company built with 
    pip install -r requirements.txt
    ```
 
-3. **Install Node dependencies and build CSS**
+3. **Install Node dependencies**
    ```bash
    cd ..
    npm install
-   npm run build:css
    ```
 
 4. **Run the application**
 
-   **Single command for development (recommended):**
+   **Development mode (React + FastAPI):**
    ```bash
-   npm run dev
+   npm run dev:full
    ```
    
-   This will automatically:
-   - Watch and rebuild CSS when you make changes
-   - Run the backend server with hot reload
-   - Display both processes in a single terminal with color-coded output
+   This runs:
+   - Vite dev server (React) on http://localhost:3000
+   - FastAPI backend on http://localhost:8000
+   - Vite proxies `/api` requests to backend
    
-   **Alternative - Manual setup (if needed):**
+   **Alternative - Run separately:**
    ```bash
-   # Terminal 1 - CSS Watcher
-   npm run watch:css
+   # Terminal 1 - React dev server
+   npm run dev
    
-   # Terminal 2 - Backend Server
+   # Terminal 2 - Backend server
    cd backend
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    uvicorn main:app --reload --host 0.0.0.0 --port 8000
    ```
 
 5. **Open in browser**
-   - Website: http://localhost:8000
-   - Admin Dashboard: http://localhost:8000/admin
+   - React App: http://localhost:3000 (proxies API to backend)
+   - Backend API: http://localhost:8000
    - API Docs: http://localhost:8000/docs
 
-### Development
+### Production Build
 
-The `npm run dev` command runs both the CSS watcher and backend server together. The CSS will automatically rebuild whenever you:
-- Add/remove Tailwind classes in HTML files
-- Modify `frontend/css/input.css`
-- Change `tailwind.config.js`
+Build the React app for production:
+```bash
+npm run build
+```
 
-**For Windows users:** Use `npm run dev:win` instead of `npm run dev`
+The built files will be in `dist/` directory, which FastAPI serves in production.
 
 ## 📡 API Endpoints
 
