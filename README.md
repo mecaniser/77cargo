@@ -183,6 +183,7 @@ python -m venv .venv
 .venv/bin/pip install -r backend/requirements-test.txt
 .venv/bin/python -m pytest -q backend/tests
 npm ci
+npm run test:admin
 npm run build
 ```
 

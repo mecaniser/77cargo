@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import AdminPage from './AdminPage';
+import { adminAccessError } from '../utils/adminAccessError.mjs';
 
 export default function AdminAccess() {
   const [key, setKey] = useState('');
@@ -23,12 +24,9 @@ export default function AdminAccess() {
       if (response.ok) {
         setAuthorized(key);
         setKey('');
-      } else if (response.status === 503) {
-        setError('Admin access is disabled. Ask the service owner to configure ADMIN_ACCESS_KEY_SHA256 on the Railway backend and redeploy.');
-      } else if (response.status === 401 || response.status === 403) {
-        setError('Access denied. Check your admin access key. If access remains blocked, ask the service owner to check the Railway access restriction.');
       } else {
-        setError('Admin service unavailable. Ask the service owner to check Railway service status and deployment logs. Your access key was not saved.');
+        const message = await adminAccessError(response);
+        if (current === attempt.current) setError(message);
       }
     } catch {
       if (current === attempt.current) setError('Cannot reach the admin service. Check your connection, then ask the service owner to check Railway service status.');
