@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "77 Cargo Careers Website Frontend",
   "scripts": {
+    "test:admin": "node --test frontend/tests/*.test.mjs",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",

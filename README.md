@@ -151,7 +151,10 @@ The built files will be in `dist/` directory, which FastAPI serves in production
 
 ## 🔒 Security Notes
 
-- For production, add proper authentication to admin routes
+- Private applicant reads/status changes/deletes and contact reads require a server-verified admin bearer access key. Public application/contact POSTs remain unauthenticated.
+- Admin authentication fails closed (503) when `ADMIN_ACCESS_KEY_SHA256` is missing or malformed. There are no default credentials.
+- The admin UI keeps its key only in React memory, never browser storage, cookies, URLs or the build. It clears access on sign-out, page exit, revoked access and after 15 minutes.
+- The API accepts only explicit Authorization headers, not cookies or URL parameters; all API responses use `Cache-Control: no-store`. Cross-origin access is disabled (Vite's local proxy still works).
 - Use environment variables for sensitive configuration
 - Enable HTTPS in production
 - Implement rate limiting for API endpoints
@@ -160,3 +163,28 @@ The built files will be in `dist/` directory, which FastAPI serves in production
 
 © 2024 77 Cargo. All rights reserved.
 
+
+## Admin access rollout (operator approval required)
+
+**Keep the existing Railway containment block until a separately authorized deployment and verification. This source change does not reopen the service.**
+
+1. Review the draft and run synthetic tests plus the frontend build.
+2. With owner approval, generate a random 32-byte hex access key in an approved password manager. Compute SHA-256 of the **64-character lowercase hex text** (not of decoded bytes), with no trailing newline. Configure only the lowercase digest as `ADMIN_ACCESS_KEY_SHA256` on the backend. Do not use a human password, commit a key, or put it in a Vite variable.
+3. Deploy with separate authorization, keeping containment. Validate unauthorized rejection and public intake with synthetic data in a staging environment; do not inspect applicant records for verification.
+4. Only after protection is verified, obtain approval to remove the temporary Railway block.
+5. Provide the original access key to the authorized administrator using an approved secret-sharing channel. Rotating the key means replacing its digest in backend configuration and applying Railway's configuration change. The old key then fails on its next request. Deleting the setting disables admin access without disabling public intake.
+
+This is a minimal single-role shared-key control, not individual accounts, MFA, per-user audit trails or an identity provider. A key holder has full admin access. The UI timeout clears local memory; it does not expire the underlying key server-side. Use HTTPS only and rotate if exposure is suspected. Do not reopen until the operator accepts these limitations or replaces this control with the organization's identity provider.
+
+### Synthetic verification
+
+```bash
+python -m venv .venv
+.venv/bin/pip install -r backend/requirements-test.txt
+.venv/bin/python -m pytest -q backend/tests
+npm ci
+npm run test:admin
+npm run build
+```
+
+Tests force a temporary local SQLite database, never the configured production database. They cover every private route without credentials, bad credentials, missing/malformed configuration, correct authentication, rotation, public submissions, status mutation/deletion and CORS/cache behavior.
