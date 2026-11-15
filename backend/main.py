@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, APIRouter, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -8,6 +8,7 @@ from contextlib import asynccontextmanager
 from typing import List
 import os
 
+from admin_auth import require_admin
 from database import get_db, init_db
 from models import JobApplication, ContactMessage, ApplicationStatus
 from schemas import (
@@ -34,11 +35,29 @@ app = FastAPI(
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=[],  # UI and API are same-origin; do not expose admin data cross-origin.
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# All private operations live on this router and inherit authorization.
+admin = APIRouter(dependencies=[Depends(require_admin)])
+
+
+@admin.get("/api/admin/session")
+async def admin_session():
+    return {"authenticated": True}
+
+
+@app.middleware("http")
+async def prevent_api_caching(request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith("/api/"):
+        response.headers["Cache-Control"] = "no-store"
+        response.headers["Pragma"] = "no-cache"
+    return response
+
 
 # Mount static files
 frontend_path = os.path.join(os.path.dirname(__file__), "..", "frontend")
@@ -71,7 +90,7 @@ async def create_application(
     return db_application
 
 
-@app.get("/api/applications", response_model=List[JobApplicationResponse])
+@admin.get("/api/applications", response_model=List[JobApplicationResponse])
 async def get_applications(
     skip: int = 0,
     limit: int = 100,
@@ -89,7 +108,7 @@ async def get_applications(
     return result.scalars().all()
 
 
-@app.get("/api/applications/{application_id}", response_model=JobApplicationResponse)
+@admin.get("/api/applications/{application_id}", response_model=JobApplicationResponse)
 async def get_application(
     application_id: int,
     db: AsyncSession = Depends(get_db)
@@ -106,7 +125,7 @@ async def get_application(
     return application
 
 
-@app.patch("/api/applications/{application_id}/status", response_model=JobApplicationResponse)
+@admin.patch("/api/applications/{application_id}/status", response_model=JobApplicationResponse)
 async def update_application_status(
     application_id: int,
     status_update: JobApplicationStatusUpdate,
@@ -127,7 +146,7 @@ async def update_application_status(
     return application
 
 
-@app.delete("/api/applications/{application_id}", status_code=status.HTTP_204_NO_CONTENT)
+@admin.delete("/api/applications/{application_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_application(
     application_id: int,
     db: AsyncSession = Depends(get_db)
@@ -163,7 +182,7 @@ async def create_contact_message(
     return db_message
 
 
-@app.get("/api/contact", response_model=List[ContactMessageResponse])
+@admin.get("/api/contact", response_model=List[ContactMessageResponse])
 async def get_contact_messages(
     skip: int = 0,
     limit: int = 100,
@@ -177,6 +196,9 @@ async def get_contact_messages(
         .limit(limit)
     )
     return result.scalars().all()
+
+
+app.include_router(admin)
 
 
 # ============== Health Check ==============

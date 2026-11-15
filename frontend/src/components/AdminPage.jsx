@@ -1,7 +1,22 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const AdminPage = () => {
+const AdminPage = ({ accessKey, onSignOut }) => {
+  const [error, setError] = useState('');
+  const adminFetch = async (url, options = {}) => {
+    const response = await fetch(url, {
+      ...options,
+      headers: { ...options.headers, Authorization: `Bearer ${accessKey}` },
+      cache: 'no-store',
+      credentials: 'omit',
+    });
+    if ([401, 403, 503].includes(response.status)) {
+      onSignOut('Admin access unavailable or revoked. Ask the service owner to check your access key and Railway service configuration.');
+      throw new Error('Admin access denied');
+    }
+    if (!response.ok) throw new Error('The admin request failed. Check Railway service status and deployment logs before retrying.');
+    return response;
+  };
   const [activeTab, setActiveTab] = useState('applications');
   const [applications, setApplications] = useState([]);
   const [contacts, setContacts] = useState([]);
@@ -20,9 +35,10 @@ const AdminPage = () => {
 
   const loadData = async () => {
     setLoading(true);
+    setError('');
     try {
       if (activeTab === 'applications') {
-        const response = await fetch('/api/applications');
+        const response = await adminFetch('/api/applications');
         if (response.ok) {
           const data = await response.json();
           const filtered = statusFilter ? data.filter(app => app.status === statusFilter) : data;
@@ -37,7 +53,7 @@ const AdminPage = () => {
           });
         }
       } else {
-        const response = await fetch('/api/contact');
+        const response = await adminFetch('/api/contact');
         if (response.ok) {
           const data = await response.json();
           setContacts(data);
@@ -45,7 +61,7 @@ const AdminPage = () => {
         }
       }
     } catch (error) {
-      console.error('Error loading data:', error);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -53,7 +69,7 @@ const AdminPage = () => {
 
   const updateApplicationStatus = async (id, status) => {
     try {
-      const response = await fetch(`/api/applications/${id}/status`, {
+      const response = await adminFetch(`/api/applications/${id}/status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -67,8 +83,7 @@ const AdminPage = () => {
         alert('Failed to update status');
       }
     } catch (error) {
-      console.error('Error updating status:', error);
-      alert('Failed to update status');
+      setError(error.message);
     }
   };
 
@@ -124,6 +139,8 @@ const AdminPage = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {error && <p role="alert" className="text-cargo-red mb-4">{error}</p>}
+        <button onClick={() => onSignOut()} className="btn-secondary mb-4">Sign out</button>
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-xl p-6 shadow-sm">

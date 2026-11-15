@@ -5,7 +5,7 @@ import HomePage from './components/HomePage';
 import AboutPage from './components/AboutPage';
 import ContactPage from './components/ContactPage';
 import CareersPage from './components/CareersPage';
-import AdminPage from './components/AdminPage';
+import AdminAccess from './components/AdminAccess';
 import './App.css';
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/careers" element={<CareersPage />} />
-            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin" element={<AdminAccess />} />
           </Routes>
         </Router>
       )}
